@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -100,3 +101,15 @@ class Shop(models.Model):
     class Meta:
         verbose_name_plural = "Магазини"
         verbose_name = "Магазин"
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Користувач")
+    recipies = models.ManyToManyField(Receipt, blank=False)
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        verbose_name_plural = "Улюблені"
+        verbose_name = "Улюблений рецепт"

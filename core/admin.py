@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from core.models import Product, Shop, Receipt, StockItem, Purchase, ReceiptProduct, ReceiptStep
+from core.models import Product, Shop, Receipt, StockItem, Purchase, ReceiptProduct, ReceiptStep, Favorite
 
 admin.site.site_header = "Рецепти"
 admin.site.site_title = "Рецепти"
@@ -51,3 +51,8 @@ class PurchaseAdmin(admin.ModelAdmin):
     list_display = ('date', 'total_price')
     search_fields = ('date', 'total_price')
     inlines = [StockItemsInline]
+
+
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ('user', )
