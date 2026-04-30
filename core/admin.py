@@ -38,6 +38,7 @@ class ReceiptStepInline(admin.StackedInline):
 class ReceiptAdmin(admin.ModelAdmin):
     list_display = ('title', 'description')
     search_fields = ('title', 'description')
+    list_filter = ('products__product__title', )
     inlines = [ReceiptProductInline, ReceiptStepInline]
 
 
