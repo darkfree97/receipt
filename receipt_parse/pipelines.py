@@ -5,7 +5,7 @@ from receipt_parse.items import ReceiptItem
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "receipt.settings")
 django.setup()
-from core.models import MeasurementUnit, Product, Receipt, ReceiptProduct, ReceiptStep  # noqa
+from core.models import Product, Receipt, ReceiptProduct, ReceiptStep  # noqa
 
 
 logger = logging.getLogger(__name__)
@@ -21,18 +21,8 @@ class DjangoWriterPipeline:
         # create receipt products
         products = []
         for ingredient in item['ingredients']:
-            # create measurement unit
-            measurement, created = await MeasurementUnit.objects.aget_or_create(
-                name=ingredient['unit'],
-                short_name=ingredient['unit']
-            )
-            if created:
-                logger.info(f"Created measurement unit: {measurement}")
-
-            # create product
             product, created = await Product.objects.aget_or_create(
                 title=str(ingredient['name']).lower().capitalize(),
-                measurement_unit=measurement
             )
             if created:
                 logger.info(f"Created product: {product}")
@@ -40,7 +30,8 @@ class DjangoWriterPipeline:
             products.append(ReceiptProduct(
                 receipt=receipt,
                 product=product,
-                quantity=float(ingredient['quantity'])
+                quantity=float(ingredient['quantity']),
+                measurement_unit=ingredient['unit'],
             ))
         await ReceiptProduct.objects.abulk_create(products)
 
