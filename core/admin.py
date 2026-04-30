@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from core.models import MeasurementUnit, Product, Shop, Receipt, StockItem, Purchase
+from core.models import MeasurementUnit, Product, Shop, Receipt, StockItem, Purchase, ReceiptProduct, ReceiptStep
 
 admin.site.site_header = "Рецепти"
 admin.site.site_title = "Рецепти"
@@ -25,10 +25,21 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('title',)
 
 
+class ReceiptProductInline(admin.TabularInline):
+    model = ReceiptProduct
+    extra = 1
+
+
+class ReceiptStepInline(admin.TabularInline):
+    model = ReceiptStep
+    extra = 0
+
+
 @admin.register(Receipt)
 class ReceiptAdmin(admin.ModelAdmin):
     list_display = ('title', 'description')
     search_fields = ('title', 'description')
+    inlines = [ReceiptProductInline, ReceiptStepInline]
 
 
 class StockItemsInline(admin.TabularInline):
