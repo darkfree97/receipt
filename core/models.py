@@ -104,7 +104,7 @@ class Shop(models.Model):
 
 
 class Favorite(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Користувач")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Користувач")
     recipies = models.ManyToManyField(Receipt, blank=False)
 
     def __str__(self):
