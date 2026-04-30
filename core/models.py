@@ -36,7 +36,6 @@ class ProductCode(models.Model):
 class Receipt(models.Model):
     title = models.CharField(max_length=255, verbose_name="Назва")
     description = models.TextField(verbose_name="Опис")
-    products = models.ManyToManyField(Product, verbose_name="Продукти")
 
     def __str__(self):
         return self.title
@@ -44,6 +43,19 @@ class Receipt(models.Model):
     class Meta:
         verbose_name_plural = "Рецепти"
         verbose_name = "Рецепт"
+
+
+class ReceiptProduct(models.Model):
+    receipt = models.ForeignKey(Receipt, on_delete=models.CASCADE, verbose_name="Рецепт", related_name="products")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Продукт", related_name="receipts")
+    quantity = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Кількість")
+
+    def __str__(self):
+        return f"{self.receipt.title} - {self.product.title} - {self.quantity}"
+
+    class Meta:
+        verbose_name_plural = "Продукти в рецептах"
+        verbose_name = "Продукт в рецептах"
 
 
 class ReceiptStep(models.Model):
