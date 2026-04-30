@@ -23,6 +23,11 @@ class ReceiptProductInline(admin.TabularInline):
     model = ReceiptProduct
     extra = 1
 
+    class Media:
+        css = {
+            'all': ('admin/css/custom.css',)
+        }
+
 
 class ReceiptStepInline(admin.StackedInline):
     model = ReceiptStep
