@@ -15,7 +15,6 @@ class MeasurementUnit(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=255, verbose_name="Назва")
-    code = models.CharField(max_length=255, verbose_name="Код")
     measurement_unit = models.ForeignKey(MeasurementUnit, on_delete=models.CASCADE, verbose_name="Одиниця вимірювання")
 
     def __str__(self):
@@ -24,6 +23,14 @@ class Product(models.Model):
     class Meta:
         verbose_name_plural = "Продукти"
         verbose_name = "Продукт"
+
+
+class ProductCode(models.Model):
+    code = models.CharField(max_length=255, verbose_name="Код", primary_key=True, unique=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Продукт")
+
+    def __str__(self):
+        return f"{self.product} - {self.code}"
 
 
 class Receipt(models.Model):
@@ -37,6 +44,21 @@ class Receipt(models.Model):
     class Meta:
         verbose_name_plural = "Рецепти"
         verbose_name = "Рецепт"
+
+
+class ReceiptStep(models.Model):
+    receipt = models.ForeignKey(Receipt, on_delete=models.CASCADE, verbose_name="Рецепт")
+    title = models.CharField(max_length=255, verbose_name="Назва кроку")
+    description = models.TextField(null=True, blank=True, verbose_name="Опис")
+    priority = models.PositiveIntegerField(default=0, verbose_name="Пріоритет")
+
+    def __str__(self):
+        return f"{self.receipt.title} - {self.priority}"
+
+    class Meta:
+        ordering = ['priority']
+        verbose_name_plural = "Кроки рецепту"
+        verbose_name = "Крок рецепту"
 
 
 class StockItem(models.Model):

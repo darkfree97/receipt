@@ -21,8 +21,8 @@ class ShopAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('title', 'code', 'measurement_unit')
-    search_fields = ('title', 'code')
+    list_display = ('title', 'measurement_unit')
+    search_fields = ('title',)
 
 
 @admin.register(Receipt)
